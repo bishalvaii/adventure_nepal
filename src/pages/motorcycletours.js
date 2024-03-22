@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import { Grid, Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
 import ProductCard from '@/components/ProductCard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-
-import lipstick from "../../public/lipstick.png"
+import lomangthang from "../images/lomangthang.jpg"
+import manag from "../images/manag.jpg"
+import biker from "../images/biker.jpeg"
 import { Box } from '@mui/system';
 import { Router, useRouter } from 'next/router';
 
@@ -15,89 +16,74 @@ const products = [
     name: 'Product 1',
     description: 'Description for Product 1',
     price: '28',
-    image: lipstick,
+    image: manag,
+    elevation: '2000-5000m',
+    duration: '8 days tour',
+    thumbnail_text: 'Ride to manang'
   },
   {
     id: 2,
     name: 'Product 2',
     description: 'Description for Product 2',
     price: '28',
-    image: lipstick,
+    image: lomangthang,
+    elevation: '2000-5000m',
+    duration: '8 days tour',
+    thumbnail_text: 'Ride to manang'
   },
   {
     id: 3,
     name: 'Product 3',
     description: 'Description for Product 3',
     price: '28',
-    image: lipstick,
+    image: biker,
+    elevation: '2000-5000m',
+    duration: '8 days tour',
+    thumbnail_text: 'Ride to manang'
   },
   {
     id: 4,
     name: 'Product 1',
     description: 'Description for Product 1',
     price: '28',
-    image: lipstick,
+    image: manag,
+    elevation: '2000-5000m',
+    duration: '8 days tour',
+    thumbnail_text: 'Ride to manang'
   },
   {
     id: 5,
     name: 'Product 2',
     description: 'Description for Product 2',
     price: '28',
-    image: lipstick,
+    image: lomangthang,
+    elevation: '2000-5000m',
+    duration: '8 days tour',
+    thumbnail_text: 'Ride to manang'
   },
   {
     id: 6,
     name: 'Product 3',
     description: 'Description for Product 3',
     price: '28',
-    image: lipstick,
+    image: biker,
+    elevation: '2000-5000m',
+    duration: '8 days tour',
+    thumbnail_text: 'Ride to manang'
   },
   {
     id: 7,
-    name: 'Product 1',
-    description: 'Description for Product 1',
-    price: '28',
-    image: lipstick,
-  },
-  {
-    id: 8,
-    name: 'Product 2',
-    description: 'Description for Product 2',
-    price: '28',
-    image: lipstick,
-  },
-  {
-    id: 9,
     name: 'Product 3',
     description: 'Description for Product 3',
     price: '28',
-    image: lipstick,
+    image: biker,
+    elevation: '2000-5000m',
+    duration: '8 days tour',
+    thumbnail_text: 'Ride to manang'
   },
-  {
-    id: 10,
-    name: 'Product 1',
-    description: 'Description for Product 1',
-    price: '28',
-    image: lipstick,
-  },
-  {
-    id: 11,
-    name: 'Product 2',
-    description: 'Description for Product 2',
-    price: '28',
-    image: lipstick,
-  },
-  {
-    id: 12,
-    name: 'Product 3',
-    description: 'Description for Product 3',
-    price: '28',
-    image: lipstick,
-  },
-  // Add more products as needed
-];
-
-const productsPerPage = 9
+  
+]
+const productsPerPage = 6
 
 const Shop = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -143,34 +129,13 @@ const handleCheckout = () => {
   return (
       <div className="shop">
           <Box sx={{ position: 'fixed', top: 0, right: 0, zIndex: 9999, m: 2 }}>
-          <Button variant="text" onClick={handleCheckout}>
-    {/* Wrap icon inside a button */}
-    <ShoppingCartIcon sx={{ fontSize: '2.5rem' }} />
-    {/* Display cart count */}
-    <Typography
-        variant="body1"
-        sx={{
-            position: 'absolute',
-            top: -6,
-            right: -6,
-            borderRadius: '50%',
-            width: 20,
-            height: 20,
-            backgroundColor: 'red',
-            color: 'white',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            fontSize: '0.8rem',
-        }}
-    >
-        {cartCount || '0'}
-    </Typography>
-</Button>
+          
+   
+    
 
           </Box>
 
-          <Typography variant="h3" sx={{ mt: 4 }}>Shop</Typography>
+          <Typography variant="h3" sx={{ mt: 4 }}>Motorcycle tours</Typography>
 
           <Grid container spacing={3}>
               {getPageProducts().map((product) => (

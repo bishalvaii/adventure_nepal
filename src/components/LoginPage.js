@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Grid, Paper, TextField, Button, Typography, Box } from '@mui/material';
-import signupimg from "../images/signupimg.png";
+import heroimage from "../images/heroimage.jpg";
 import Image from 'next/image';
 
 
@@ -40,7 +40,7 @@ const LoginPage = () => {
       <Grid item xs={6}>
         <Box display="flex" justifyContent="flex-start" alignItems="center" height="100%">
           <Image
-            src={signupimg}
+            src={heroimage}
             alt="Signup Image"
             width={680}
             height={600}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Grid, Paper, TextField, Button, Typography, Box } from '@mui/material';
 import Image from 'next/image';
-import signupimg from "../images/signupimg.png";
+import loginimage from "../images/loginimage.jpg";
 import { useRouter } from 'next/navigation'; // Import the useRouter hook
 
 const SignupPage = () => {
@@ -53,7 +53,7 @@ const SignupPage = () => {
       <Grid item xs={6}>
         <Box display="flex" justifyContent="flex-start" alignItems="center" height="100%">
           <Image
-            src={signupimg}
+            src={loginimage}
             alt="Signup Image"
             width={680}
             height={600}
@@ -62,30 +62,14 @@ const SignupPage = () => {
       </Grid>
       {/* Right side with signup form */}
       <Grid item xs={6}>
-        <Box display="flex" justifyContent="end" alignItems="center" height="100%">
-          <Paper elevation={3} style={{ padding: 20, maxWidth: 700 }}>
+        <Box display="flex" justifyContent="end" alignItems="center" height="100%" color="blue">
+          <Paper elevation={3} style={{ padding: 20, maxWidth: 700, backgroundColor: 'blue' }}>
             <Typography variant="h5" align="center" gutterBottom>
               Sign Up
             </Typography>
             <form onSubmit={handleSubmit}>
-              <TextField
-                name="fullName"
-                label="Full Name"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={formData.fullName}
-                onChange={handleChange}
-              />
-              <TextField
-                name="contactNo"
-                label="Contact No"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={formData.contactNo}
-                onChange={handleChange}
-              />
+          
+             
               <TextField
                 name="email"
                 label="Email"
@@ -95,15 +79,7 @@ const SignupPage = () => {
                 value={formData.email}
                 onChange={handleChange}
               />
-              <TextField
-                name="username"
-                label="Username"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={formData.username}
-                onChange={handleChange}
-              />
+             
               <TextField
                 name="password"
                 label="Password"
