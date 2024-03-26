@@ -3,7 +3,7 @@ import { Grid, Paper, TextField, Button, Typography, Box } from '@mui/material';
 import Image from 'next/image';
 import loginimage from "../images/loginimage.jpg";
 import { useRouter } from 'next/navigation'; // Import the useRouter hook
-
+import "../app/styles/root.css"
 const SignupPage = () => {
   const router = useRouter(); // Initialize the useRouter hook
 
@@ -24,30 +24,44 @@ const SignupPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Basic validation
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+    try {
+      const response = await fetch('http://localhost:5000/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setFormData({
+          fullName: '',
+          contactNo: '',
+          email: '',
+          username: '',
+          password: '',
+          confirmPassword: ''
+        });
+        router.push('/login')
+      }  else {
+        console.error(data.error || 'Signup failed');
+      }
+    }  catch (error) {
+      console.error('An error occurred:', error);
     }
-    // You can perform further validation here if needed
-    // For now, just log the form data
-    console.log("Form Data:", formData);
-    // Reset form data
-    setFormData({
-      fullName: '',
-      contactNo: '',
-      email: '',
-      username: '',
-      password: '',
-      confirmPassword: ''
-    });
-    // Navigate to the login page
-    router.push('/login');
+   
+    
+    
+   
   };
 
   return (
+    <Box borderRadius={16} overflow="hidden" bgcolor="#596398" height="95vh">
+
     <Grid container style={{ height: '100vh' }}>
       {/* Left side with image */}
       <Grid item xs={6}>
@@ -62,27 +76,45 @@ const SignupPage = () => {
       </Grid>
       {/* Right side with signup form */}
       <Grid item xs={6}>
-        <Box display="flex" justifyContent="end" alignItems="center" height="100%" color="blue">
-          <Paper elevation={3} style={{ padding: 20, maxWidth: 700, backgroundColor: 'blue' }}>
-            <Typography variant="h5" align="center" gutterBottom>
-              Sign Up
-            </Typography>
+        <Box display="flex"  sx={{ml:10}}alignItems="center" height="100%" color="">
+           
+           
+            
             <form onSubmit={handleSubmit}>
-          
-             
+            <Typography variant="h5" align="center" gutterBottom color={'white'} sx={{mb: 5, fontFamily: 'Poppins', fontWeight: 'bold'}}  >
+                Sign Up
+              </Typography>
+             <Typography color={'white'}>Your email address</Typography>
               <TextField
                 name="email"
-                label="Email"
+                InputProps={{
+                  style: { color: 'black' }, // Text color
+                  classes: {
+                    root: 'outlined-input', // Custom class for background color
+                  },
+                }}
+                InputLabelProps={{
+                  className: 'outlined-label', // Custom class for label color
+                }}
                 variant="outlined"
                 fullWidth
                 margin="normal"
                 value={formData.email}
                 onChange={handleChange}
+                className="outlined-textfield" 
               />
-             
+             <Typography color={'white'}>Password</Typography>
               <TextField
                 name="password"
-                label="Password"
+                InputProps={{
+                  style: { color: 'black' }, // Text color
+                  classes: {
+                    root: 'outlined-input', // Custom class for background color
+                  },
+                }}
+                InputLabelProps={{
+                  className: 'outlined-label', // Custom class for label color
+                }}
                 variant="outlined"
                 type="password"
                 fullWidth
@@ -90,24 +122,42 @@ const SignupPage = () => {
                 value={formData.password}
                 onChange={handleChange}
               />
+              <Typography color={'white'}>Confirm Password</Typography>
               <TextField
                 name="confirmPassword"
-                label="Confirm Password"
+                InputProps={{
+                  style: { color: 'black' }, // Text color
+                  classes: {
+                    root: 'outlined-input', // Custom class for background color
+                  },
+                }}
+                InputLabelProps={{
+                  className: 'outlined-label', // Custom class for label color
+                }}
                 variant="outlined"
                 type="password"
                 fullWidth
                 margin="normal"
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                InputProps={{
+                  style: { color: 'black' }, // Text color
+                  classes: {
+                    root: 'outlined-input', // Custom class for background color
+                  },
+                }}
+                InputLabelProps={{
+                  className: 'outlined-label', // Custom class for label color
+                }}
               />
-              <Button variant="contained" color="primary" fullWidth type="submit" style={{ marginTop: 20 }}>
-                Sign Up
+              <Button variant="contained" fullWidth  type="submit" style={{ marginTop: 20, backgroundColor: 'white', color: '#596398' }}>
+                Create Account
               </Button>
             </form>
-          </Paper>
         </Box>
       </Grid>
     </Grid>
+    </Box>
   );
 };
 

@@ -1,46 +1,66 @@
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Grid, Paper, TextField, Button, Typography, Box } from '@mui/material';
-import heroimage from "../images/heroimage.jpg";
 import Image from 'next/image';
-
-
+import loginimage from "../images/loginimage.jpg";
+import { useRouter } from 'next/navigation'; // Import the useRouter hook
+import "../app/styles/root.css"
 const LoginPage = () => {
-  const router = useRouter();
+  const router = useRouter(); // Initialize the useRouter hook
+
   const [formData, setFormData] = useState({
+    fullName: '',
+    contactNo: '',
+    email: '',
     username: '',
     password: '',
+    confirmPassword: ''
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
+    setFormData(prevState => ({
       ...prevState,
-      [name]: value,
+      [name]: value
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Perform validation here if needed
-    // For now, just log the form data
-    console.log('Form Data:', formData);
-    // Reset form data
-    setFormData({
-      username: '',
-      password: '',
-    });
-    // Navigate to the dashboard page upon successful login
-    router.push('/dashboard');
+    try {
+      const response = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          
+        },
+        body: JSON.stringify(formData)
+      })
+      const data = await response.json()
+      if(response.ok) {
+        setFormData({
+          username: '',
+          password: ''
+        })
+        localStorage.setItem('userId', data.userId);
+        router.push('/dashboard');
+      }
+     else {
+      console.error(data.error || 'Login failed')
+      }
+    } catch(error) {
+      console.error('An error occured:', error)
+    }
   };
 
   return (
+    <Box borderRadius={16} overflow="hidden" bgcolor="#596398" height="95vh">
+
     <Grid container style={{ height: '100vh' }}>
       {/* Left side with image */}
       <Grid item xs={6}>
         <Box display="flex" justifyContent="flex-start" alignItems="center" height="100%">
           <Image
-            src={heroimage}
+            src={loginimage}
             alt="Signup Image"
             width={680}
             height={600}
@@ -49,25 +69,45 @@ const LoginPage = () => {
       </Grid>
       {/* Right side with signup form */}
       <Grid item xs={6}>
-        <Box display="flex" justifyContent="end" alignItems="center" height="100%">
-          <Paper elevation={3} style={{ padding: 20, maxWidth: 700 }}>
-            <Typography variant="h5" align="center" gutterBottom>
-              Login 
-            </Typography>
+        <Box display="flex"  sx={{ml:10}}alignItems="center" height="100%" color="">
+           
+           
+            
             <form onSubmit={handleSubmit}>
-              
+            <Typography variant="h5" align="center" gutterBottom color={'white'} sx={{mb: 5, fontFamily: 'Poppins', fontWeight: 'bold'}}  >
+                Login
+              </Typography>
+             <Typography color={'white'}>Your email address</Typography>
               <TextField
-                name="username"
-                label="Username"
+                name="email"
+                InputProps={{
+                  style: { color: 'black' }, // Text color
+                  classes: {
+                    root: 'outlined-input', // Custom class for background color
+                  },
+                }}
+                InputLabelProps={{
+                  className: 'outlined-label', // Custom class for label color
+                }}
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                value={formData.username}
+                value={formData.email}
                 onChange={handleChange}
+                className="outlined-textfield" 
               />
+             <Typography color={'white'}>Password</Typography>
               <TextField
                 name="password"
-                label="Password"
+                InputProps={{
+                  style: { color: 'black' }, // Text color
+                  classes: {
+                    root: 'outlined-input', // Custom class for background color
+                  },
+                }}
+                InputLabelProps={{
+                  className: 'outlined-label', // Custom class for label color
+                }}
                 variant="outlined"
                 type="password"
                 fullWidth
@@ -75,16 +115,15 @@ const LoginPage = () => {
                 value={formData.password}
                 onChange={handleChange}
               />
-             
               
-              <Button variant="contained" color="primary" fullWidth type="submit" style={{ marginTop: 20 }}>
-                Login 
+              <Button variant="contained" fullWidth  type="submit" style={{ marginTop: 20, backgroundColor: 'white', color: '#596398' }}>
+               Login
               </Button>
             </form>
-          </Paper>
         </Box>
       </Grid>
     </Grid>
+    </Box>
   );
 };
 

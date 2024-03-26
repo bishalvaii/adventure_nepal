@@ -1,0 +1,19 @@
+.outlined-input {
+    background-color: white; /* Background color */
+  }
+  
+  .outlined-label {
+    color: white; /* Label color */
+  }
+  
+  .outlined-textfield {
+    & .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+      border-color: white; /* Hover color for outlined border */
+    }
+    & .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border-color: white; /* Focus color for outlined border */
+    }
+    & .MuiOutlinedInput-notchedOutline {
+      border-color: white; /* Default color for outlined border */
+    }
+  }
