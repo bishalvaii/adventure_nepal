@@ -12,42 +12,12 @@ import { Facebook, Instagram, Pinterest } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import vip from "../images/vip.png"
 import ProductCard from './ProductCard';
+import Header from './Header';
+import { useEffect, useState } from 'react';
 
-const products = [
-  {
-    id: 1,
-    name: 'Product 1',
-    description: 'Description for Product 1',
-    price: '28',
-    image: manag,
-    elevation: '2000-5000m',
-    duration: '8 days tour',
-    thumbnail_text: 'Ride to manang'
-  },
-  {
-    id: 2,
-    name: 'Product 2',
-    description: 'Description for Product 2',
-    price: '28',
-    image: lomangthang,
-    elevation: '2000-5000m',
-    duration: '8 days tour',
-    thumbnail_text: 'Ride to manang'
-  },
-  {
-    id: 3,
-    name: 'Product 3',
-    description: 'Description for Product 3',
-    price: '28',
-    image: biker,
-    elevation: '2000-5000m',
-    duration: '8 days tour',
-    thumbnail_text: 'Ride to manang'
-  },
-  
-]
 
 const Dashboard = () => {
+  const [services, setServices] = useState([])
   const router = useRouter();
   const navigateToTours = () => {
     router.push('/motorcycletours');
@@ -56,56 +26,27 @@ const Dashboard = () => {
   const navigateToAboutUs = () => {
     router.push('/aboutus')
   }
-
   const navigateToContact = () => {
     router.push('/contact')
+  } 
+
+  const navigateToTourInfo = () => {
+    router.push('/tourinfo')
   } 
   const navigateToHome = () => {
     router.push('/dashboard')
   }
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/services')
+    .then((response) => response.json())
+    .then(data => setServices(data))
+    .catch(error => console.error('Error fetching services', error))
+  }, [])
       return (
         <>
             {/* Navbar */}
-            <AppBar position="static" sx={{ bgcolor: "#DEC5B7" }}>
-                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    {/* Left section */}
-
-                    <Typography variant="h6" component="div" sx={{ mr: 25 }}>
-                        Adventure Nepal
-                    </Typography>
-
-                    <Box style={{ display: 'flex', gap: '20px', justifyContent: 'space-between', alignItems: 'center' }}>
-                       <Button onClick={navigateToHome}>
-                        <Typography variant="h6" component="div">
-                            Home
-                        </Typography>
-                        </Button>
-                        <Button onClick={navigateToAboutUs}>
-                        <Typography variant="h6" component="div">
-                        About us
-                        </Typography>
-                        </Button>
-                        <Button onClick={navigateToTours}>
-                        <Typography variant="h6" component="div">
-                            Motocycle tours
-                                                    </Typography>
-                        </Button>
-                        <Typography variant="h6" component="div" onClick={navigateToContact}>
-                            Tour info
-                        </Typography>
-                    </Box>
-                    {/* Center section */}
-                
-                    {/* Right section */}
-                    <Box display="flex" alignItems="center">
-                        <IconButton color="inherit">
-                            <SearchIcon />
-                        </IconButton>
-                        <Avatar />
-                       
-                    </Box>
-                </Toolbar>
-            </AppBar>
+           <Header />
 
             {/* Hero section */}
             <Box position="relative" height={400}>
@@ -170,7 +111,7 @@ const Dashboard = () => {
             </Box>
             <Box sx={{}}>
             <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-    {products.map(product => (
+    {services.map(product => (
       <ProductCard key={product.id} product={product} />
     ))}
   </div>

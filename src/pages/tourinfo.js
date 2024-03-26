@@ -3,6 +3,7 @@ import { AppBar, Avatar, Box, Button, Grid, IconButton, Toolbar, Typography } fr
 import { useRouter } from 'next/router';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Header from '@/components/Header';
 
 
 
@@ -24,45 +25,7 @@ const contact = () => {
   }
   return (
     <>
-    <AppBar position="static" sx={{ bgcolor: "#DEC5B7" }}>
-    <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        {/* Left section */}
-        <Box style={{ display: 'flex', gap: '20px', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h6" component="div">
-                Home
-            </Typography>
-            <Button onClick={navigateToShop}>
-            <Typography variant="h6" component="div">
-                Shop
-            </Typography>
-            </Button>
-            <Button onClick={navigateToAboutUs}>
-            <Typography variant="h6" component="div">
-                About Us
-            </Typography>
-            </Button>
-            <Typography variant="h6" component="div" onClick={navigateToContact}>
-                Contact Us
-            </Typography>
-        </Box>
-        {/* Center section */}
-        <Button onClick={navigateToHome}>
-        <Typography variant="h6" component="div" sx={{ mr: 25 }}>
-            Beauty Diva
-        </Typography>
-        </Button>
-        {/* Right section */}
-        <Box display="flex" alignItems="center">
-            <IconButton color="inherit">
-                <SearchIcon />
-            </IconButton>
-            <Avatar />
-            <IconButton color="inherit">
-                <ShoppingCartIcon />
-            </IconButton>
-        </Box>
-    </Toolbar>
-</AppBar>
+    <Header />
 
 <Box  mt={10} >
                 
