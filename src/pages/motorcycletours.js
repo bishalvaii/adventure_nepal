@@ -9,6 +9,7 @@ import manag from "../images/manag.jpg"
 import biker from "../images/biker.jpeg"
 import { Box } from '@mui/system';
 import { Router, useRouter } from 'next/router';
+import Header from '@/components/Header';
 
 
 
@@ -62,6 +63,8 @@ useEffect(() => {
   .catch(error => console.error('Error fetching services', error))
 }, [])
   return (
+    <Box>
+        <Header />
       <div className="shop">
           <Box sx={{ position: 'fixed', top: 0, right: 0, zIndex: 9999, m: 2 }}>
           
@@ -70,7 +73,7 @@ useEffect(() => {
 
           </Box>
 
-          <Typography variant="h3" sx={{ mt: 4 }}>Motorcycle tours</Typography>
+          <Typography variant="h3" sx={{ mt: 4 }}>What we offer</Typography>
 
           <Grid container spacing={3}>
               {services.map((product) => (
@@ -90,6 +93,7 @@ useEffect(() => {
               <Button variant='outlined' disabled={currentPage === totalPages} onClick={handleNextPage}>Next</Button>
           </div>
       </div>
+      </Box>
   );
 };
 

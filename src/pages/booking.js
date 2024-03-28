@@ -1,148 +1,203 @@
-// pages/booking.js
-
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import { Button, Typography, TextField, FormControl, InputLabel, Select, MenuItem, Grid, Box } from '@mui/material';
+import {
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Typography,
+  Button,
+  TextareaAutosize,
+} from '@mui/material'; 
+import { Box } from '@mui/system';
 
-const BookingPage = () => {
+function BookingForm() {
   const router = useRouter();
-  const { name, duration } = router.query;
-  const [deliveryAddress, setDeliveryAddress] = useState('');
-  const [paymentGateway, setPaymentGateway] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
-  const [province, setProvince] = useState('');
-  const [city, setCity] = useState('');
-  const [toleName, setToleName] = useState('');
+  const {id} = router.query;
+  const [numAdults, setNumAdults] = useState(1);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    postalCode: '',
+    country: '',
+    state: '',
+    requirements: '',
+    payemnt: '',
+  });
 
-  const handleAddressChange = (event) => {
-    setDeliveryAddress(event.target.value);
+  const handleChangeAdults = (event) => {
+    setNumAdults(parseInt(event.target.value));
   };
 
-  const handlePaymentGatewayChange = (event) => {
-    setPaymentGateway(event.target.value);
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
   };
 
-  const handleBooking = async() => {
-//    try {
-//     const response = await fetch('http://localhost:5000/api/shipping-details', {
-//       method: 'POST',
-//       headers: {  
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         fullName,
-//         mobileNumber,
-//         province,
-//         city,
-//         toleName,
-//         paymentGateway
-//       }),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Failed to add shipping details');
-//     }
-
-//     const data = await response.json();
-//     console.log(data)
-//     const shippingDetailsId = data.shippingDetails.id; // Assuming the API returns the ID of the newly created shipping details
-//  // Redirect to the appropriate payment page based on the selected payment gateway
-//  if (paymentGateway === 'esewa') {
-//   router.push('/paymentesewa');
-// } else {
-//   // Redirect to Cash on Delivery page or any other payment page
-//   router.push('/orderconfirmation');
-// }
-//    } catch (error) {
-//     console.error('Error adding shipping details:', error);
-//     // Handle error (e.g., show error message to the user)
-//   }
+  // Form submission logic (replace with your backend integration)
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Form submitted:', { ...formData, numAdults });
   };
 
   return (
-    <div>
-      <Typography variant="h3" gutterBottom>
-        {name} {duration}
+    <Box
+      className="booking-form"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        maxWidth: '600px',
+        boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+        padding: '20px',
+        margin: '20px auto',
+      }}
+    >
+      <Typography variant="h4" sx={{ mb: 2 }}>
+        Booking Information
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
+      <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+        {/* Traveler Information Section */}
+        <Typography variant="h5" sx={{ mt: 2, mb: 1 }}>
+          Traveler Information
+        </Typography>
+        <Box display="flex" alignItems="center" mb={2}>
+          <Typography variant="body2">Adults (18+):</Typography>
           <TextField
-            label="Full Name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            fullWidth
+            label="How Many?"
+            type="number"
+            name="adults"
+            value={numAdults}
+            onChange={handleChangeAdults}
+            InputLabelProps={{ shrink: true }}
+            min={1}
+            sx={{ ml: 1 }}
           />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            label="Mobile Number"
-            value={mobileNumber}
-            onChange={(e) => setMobileNumber(e.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            label="Province"
-            value={province}
-            onChange={(e) => setProvince(e.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            label="City"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            label="Address"
-            value={deliveryAddress}
-            onChange={handleAddressChange}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            label="Tole Name"
-            value={toleName}
-            onChange={(e) => setToleName(e.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <FormControl fullWidth>
-          <Typography sx={{fontWeight: 'bold'}}>Select payment gateway</Typography>
+        </Box>
+        <hr />
+
+        {/* Payment Information Section */}
+        <Typography variant="h5" sx={{ mt: 2, mb: 1 }}>
+          Payment Information
+        </Typography>
+        <Box display="flex" alignItems="center" mb={2}>
+          <Typography variant="body2">I will pay:</Typography>
+          <FormControl sx={{ minWidth: 250, ml: 1.5 }}>
+            <InputLabel id="deposit-label">Deposit</InputLabel>
             <Select
-              labelId="payment-gateway-label"
-              value={paymentGateway}
-              onChange={handlePaymentGatewayChange}
-              sx={{mt: 2}}
+              labelId="deposit-label"
+              id="deposit"
+              name="deposit"
+              value={formData.payment}
+              onChange={handleChange}
+              label="Deposit"
             >
-              <MenuItem value="esewa">eSewa</MenuItem>
-             
-              <MenuItem value="cash-on-delivery">Cash on Delivery</MenuItem>
+              <MenuItem value="">Deposit</MenuItem>
+              <MenuItem value="">Cash on Arrival</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-        
-        <Grid item xs={12}>
-          <Button variant="contained" color="primary" onClick={handleBooking} >
-            Book this tour
-          </Button>
-        </Grid>
-      </Grid>
-      
-      {/* Booking form elements */}
-      <Box>
-       
-      </Box>
-    </div>
-  );
-};
+        </Box>
+        <hr />
 
-export default BookingPage;
+        {/* Contact Information Section */}
+        <Typography variant="h5" sx={{ mt: 2, mb: 1 }}>
+          Contact Information
+        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <Box display="flex" gap="1rem">
+            <TextField
+              label="First Name"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+              sx={{ flex: 1 }}
+            />
+            <TextField
+              label="Last Name"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+              sx={{ flex: 1 }}
+            />
+          </Box>
+          <Box display="flex" gap="1rem">
+            <TextField
+              label="Phone Number"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              sx={{ flex: 1 }}
+            />
+            <TextField
+              label="Address"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              required
+              sx={{ flex: 1 }}
+            />
+          </Box>
+          <Box sx={{ display: 'flex', gap: '1rem', mt: 2 }}>
+            <TextField
+              label="City"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              required
+            />
+            <FormControl sx={{ minWidth: 210 }}>
+              <InputLabel id="country-label">Country</InputLabel>
+              <Select
+                labelId="country-label"
+                id="country"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                label="Country"
+              >
+                <MenuItem value="">Select Country</MenuItem>
+                {/* Add options for different countries here */}
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
+        <hr />
+
+        {/* Requirements Section */}
+        <Typography variant="h5" sx={{ mt: 2, mb: 1 }}>
+          Your Requirements
+        </Typography>
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
+          <Typography variant="body2">Special Requirements:</Typography>
+          <Box sx={{ width: '100%' }}> {/* Set initial width to 100% */}
+            <TextareaAutosize
+              minRows={5}
+              placeholder="Enter any special requirements you may have..."
+              name="requirements"
+              value={formData.requirements}
+              onChange={handleChange}
+              sx={{ flex: 1, width: '100%' }} // Set width to 100% inside the Box
+            />
+</Box>
+        </Box>
+        <Box sx={{ mt: 3, justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+          <Button type="submit" variant="contained" sx={{bgcolor: "#596398"}}>
+            Submit Booking
+          </Button>
+        </Box>
+      </form>
+    </Box>
+  );
+}
+
+export default BookingForm;

@@ -25,11 +25,11 @@ const Header = () => {
       router.push('/dashboard')
     }
   return (
-    <AppBar position="static" sx={{ bgcolor: "#DEC5B7" }}>
+    <AppBar position="static" sx={{ bgcolor: "#F5F5F5" }}>
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     {/* Left section */}
 
-                    <Typography variant="h6" component="div" sx={{ mr: 25 }}>
+                    <Typography variant="h5" component="div" sx={{ mr: 25, color:  "#596398" }}>
                         Adventure Nepal
                     </Typography>
 
@@ -58,9 +58,12 @@ const Header = () => {
                     {/* Center section */}
                 
                     {/* Right section */}
-                    <Box display="flex" alignItems="center">
+                    <Box display="flex" alignItems="center" sx={{gap: 2}}>
                         
                         <Avatar />
+                        <Button type="submit" variant="contained" sx={{bgcolor: "#596398"}}>
+            Contact us
+          </Button>
                        
                     </Box>
                 </Toolbar>
