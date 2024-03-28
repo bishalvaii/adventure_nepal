@@ -21,6 +21,10 @@ const Header = () => {
     const navigateToTourInfo = () => {
       router.push('/tourinfo')
     } 
+    const navigateToContactUs = () => {
+      router.push('/contact')
+    } 
+
     const navigateToHome = () => {
       router.push('/dashboard')
     }
@@ -61,7 +65,7 @@ const Header = () => {
                     <Box display="flex" alignItems="center" sx={{gap: 2}}>
                         
                         <Avatar />
-                        <Button type="submit" variant="contained" sx={{bgcolor: "#596398"}}>
+                        <Button type="submit" onClick={navigateToContactUs} variant="contained" sx={{bgcolor: "#596398"}}>
             Contact us
           </Button>
                        
