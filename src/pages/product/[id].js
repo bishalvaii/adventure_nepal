@@ -25,7 +25,7 @@ const ProductPage = () => {
      router.push({
       pathname: '/booking',
       query: {
-        name: product.thumbnail_text,
+        service_name: product.thumbnail_text,
         duration: product.duration,
         description: product.description,
         price: product.price,

@@ -81,9 +81,28 @@ const SignupPage = () => {
            
             
             <form onSubmit={handleSubmit}>
-            <Typography variant="h5" align="center" gutterBottom color={'white'} sx={{mb: 5, fontFamily: 'Poppins', fontWeight: 'bold'}}  >
+            <Typography variant="h5" align="center" gutterBottom color={'white'} sx={{mb: 3, fontFamily: 'Poppins', fontWeight: 'bold'}}  >
                 Sign Up
               </Typography>
+              <Typography color={'white'}>Your username</Typography>
+              <TextField
+                name="username"
+                InputProps={{
+                  style: { color: 'black' }, // Text color
+                  classes: {
+                    root: 'outlined-input', // Custom class for background color
+                  },
+                }}
+                InputLabelProps={{
+                  className: 'outlined-label', // Custom class for label color
+                }}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={formData.username}
+                onChange={handleChange}
+                className="outlined-textfield" 
+              />
              <Typography color={'white'}>Your email address</Typography>
               <TextField
                 name="email"
@@ -125,15 +144,13 @@ const SignupPage = () => {
               <Typography color={'white'}>Confirm Password</Typography>
               <TextField
                 name="confirmPassword"
-                InputProps={{
-                  style: { color: 'black' }, // Text color
-                  classes: {
-                    root: 'outlined-input', // Custom class for background color
-                  },
-                }}
-                InputLabelProps={{
-                  className: 'outlined-label', // Custom class for label color
-                }}
+                // InputProps={{
+                //   style: { color: 'black' }, // Text color
+                //   classes: {
+                //     root: 'outlined-input', // Custom class for background color
+                //   },
+                // }}
+               
                 variant="outlined"
                 type="password"
                 fullWidth

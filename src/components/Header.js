@@ -28,6 +28,8 @@ const Header = () => {
     const navigateToHome = () => {
       router.push('/dashboard')
     }
+
+    const username = localStorage.getItem('username')
   return (
     <AppBar position="static" sx={{ bgcolor: "#F5F5F5" }}>
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -64,7 +66,8 @@ const Header = () => {
                     {/* Right section */}
                     <Box display="flex" alignItems="center" sx={{gap: 2}}>
                         
-                        <Avatar />
+                    <Avatar sx={{ color: 'black' }} /> {/* Set the color attribute for the Avatar */}
+  <Typography variant="body1" sx={{ color: 'black' }}>{username}</Typography> {/* Set the text color for the username */}
                         <Button type="submit" onClick={navigateToContactUs} variant="contained" sx={{bgcolor: "#596398"}}>
             Contact us
           </Button>

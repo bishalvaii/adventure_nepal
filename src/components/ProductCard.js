@@ -21,14 +21,25 @@ const ProductCard = ({ product }) => (
            
           </CardContent>
         </div>
-        <Box bgcolor="" p={2} textAlign="center" style={{ position: 'absolute', top: '0', right: '0' }}>
-          <Typography sx={{ml: 5, fontWeight: 'bold', fontFamily: 'Poppins'}}variant="h5" color='black' gutterBottom>
-            {product.thumbnail_text}
-          </Typography>
-          <Typography  sx={{ml: 15,mt: 25, fontWeight: 'bold', fontFamily: 'Poppins'}} variant="h6" color='black' gutterBottom>
-              {product.duration}
-            </Typography>
-        </Box>
+        <Box
+  bgcolor="#596398"
+  p={2}
+  textAlign="center"
+  style={{
+    position: 'absolute',
+    top: '0',
+    right: '0',
+    borderRadius: '8px', // Rounded rectangle border
+    color: 'white', // Text color
+  }}
+>
+  <Typography sx={{ fontWeight: 'bold', fontFamily: 'Poppins' }} variant="h5" gutterBottom>
+    {product.thumbnail_text}
+  </Typography>
+  <Typography sx={{ mt: 1, fontWeight: 'bold', fontFamily: 'Poppins' }} variant="h6" gutterBottom>
+    {product.duration}
+  </Typography>
+</Box>
       </Card>
     </a>
   </Link>

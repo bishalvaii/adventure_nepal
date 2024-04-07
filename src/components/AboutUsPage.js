@@ -3,7 +3,7 @@ import Image from 'next/image'
 import React from 'react'
 import manag from "../images/manag.jpg"
 
-import sammu from "../images/sammu.png"
+
 
 const AboutUsPage = () => {
     return (
