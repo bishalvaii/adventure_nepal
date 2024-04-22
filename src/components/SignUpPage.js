@@ -4,17 +4,22 @@ import Image from 'next/image';
 import loginimage from "../images/loginimage.jpg";
 import { useRouter } from 'next/navigation'; // Import the useRouter hook
 import "../app/styles/root.css"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const SignupPage = () => {
   const router = useRouter(); // Initialize the useRouter hook
+  const [error, setError] = useState('');
 
   const [formData, setFormData] = useState({
-    fullName: '',
-    contactNo: '',
+    
+   
     email: '',
     username: '',
     password: '',
     confirmPassword: ''
   });
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +31,17 @@ const SignupPage = () => {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+    setError('');
+    console.log(formData);
+    // Validate form fields
+    if ( !formData.email || !formData.username || !formData.password || !formData.confirmPassword) {
+      setError('Please fill in all fields');
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
     try {
       const response = await fetch('http://localhost:5000/api/signup', {
         method: 'POST',
@@ -39,19 +55,24 @@ const SignupPage = () => {
 
       if (response.ok) {
         setFormData({
-          fullName: '',
-          contactNo: '',
+         
+         
           email: '',
           username: '',
           password: '',
           confirmPassword: ''
         });
-        router.push('/login')
+        setTimeout(() => router.push('/login'), 2000);
+       
+        toast.success('User signed up successfully!')
+        console.log(formData)
       }  else {
         console.error(data.error || 'Signup failed');
+        toast.error("Sign Up failed!")
       }
     }  catch (error) {
       console.error('An error occurred:', error);
+      toast.error("Please try again!")
     }
    
     
@@ -60,6 +81,9 @@ const SignupPage = () => {
   };
 
   return (
+    <>
+    <ToastContainer />
+  
     <Box borderRadius={16} overflow="hidden" bgcolor="#596398" height="95vh">
 
     <Grid container style={{ height: '100vh' }}>
@@ -170,11 +194,14 @@ const SignupPage = () => {
               <Button variant="contained" fullWidth  type="submit" style={{ marginTop: 20, backgroundColor: 'white', color: '#596398' }}>
                 Create Account
               </Button>
+              {error && <Typography color="error" variant="subtitle2" style={{ marginBottom: 10, fontSize: 20 }}>{error}</Typography>}
+
             </form>
         </Box>
       </Grid>
     </Grid>
     </Box>
+    </>
   );
 };
 

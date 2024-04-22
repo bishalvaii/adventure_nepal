@@ -16,6 +16,7 @@ import Header from './Header';
 import { useEffect, useState } from 'react';
 
 
+
 const Dashboard = () => {
   const [services, setServices] = useState([])
   const router = useRouter();
@@ -29,6 +30,10 @@ const Dashboard = () => {
   const navigateToContact = () => {
     router.push('/contact')
   } 
+  const handleNavigate = (url) => {
+    window.open(url, '_blank'); 
+  };
+
 
   const navigateToTourInfo = () => {
     router.push('/tourinfo')
@@ -151,15 +156,15 @@ const Dashboard = () => {
 
       
       <Box position="absolute" >
-        <IconButton color="inherit" aria-label="facebook">
-          <Facebook />
-        </IconButton>
-        <IconButton color="inherit" aria-label="instagram">
-          <Instagram />
-        </IconButton>
-        <IconButton color="inherit" aria-label="pinterest">
-          <Pinterest />
-        </IconButton>
+      <IconButton color="inherit" aria-label="facebook" onClick={() => handleNavigate('https://www.facebook.com')}>
+        <Facebook />
+      </IconButton>
+      <IconButton color="inherit" aria-label="instagram" onClick={() => handleNavigate('https://www.instagram.com')}>
+        <Instagram />
+      </IconButton>
+      <IconButton color="inherit" aria-label="pinterest" onClick={() => handleNavigate('https://www.pinterest.com')}>
+        <Pinterest />
+      </IconButton>
       </Box>
     </Box>
     <Box textAlign="center" alignItems="center" justifyContent='center'>

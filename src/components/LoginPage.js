@@ -3,6 +3,8 @@ import { Grid, TextField, Button, Typography, Box } from '@mui/material';
 import Image from 'next/image';
 import loginimage from "../images/loginimage.jpg";
 import { useRouter } from 'next/router';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -10,6 +12,7 @@ const LoginPage = () => {
     username: '',
     password: '',
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,6 +24,11 @@ const LoginPage = () => {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+    setError('');
+    if (!formData.username || !formData.password) {
+      setError('Please enter both username and password');
+      return;
+    }
     try {
       const response = await fetch('http://localhost:5000/api/login', {
         method: 'POST',
@@ -43,24 +51,27 @@ const LoginPage = () => {
 
 
         if (data.user.isAdmin) {
-          router.push('/admin');
+          setTimeout(() => router.push('/admin'), 2000); // Navigate after 2 seconds
         } else {
-          router.push('/dashboard');
+          setTimeout(() => router.push('/dashboard'), 2000); // Navigate after 2 seconds
         }
+        toast.success('Login Successful')
       } else {
         console.error(data.error || 'Login failed');
-        alert(data.error || 'Login failed');
+        toast.error("Login Failed! Check your credentials")
       }
     } catch(error) {
       console.error('An error occurred:', error);
-      alert('Invalid credentials!');
+      toast.error("Login Failed! Check your credentials")
     }
   };
   const navigateToSignup = () => {
-    router.push('/singup')
+    router.push('/signup')
   }
 
   return (
+    <>
+  <ToastContainer />
     <Box borderRadius={16} overflow="hidden" bgcolor="#596398" height="95vh">
       <Grid container style={{ height: '100vh' }}>
         {/* Left side with image */}
@@ -106,6 +117,7 @@ const LoginPage = () => {
                   style: { backgroundColor: 'white' },
                 }}
               />
+               {error && <Typography color="error" variant="subtitle2" style={{ marginBottom: 10 }}>{error}</Typography>}
               <Button variant="contained" fullWidth  type="submit" style={{ marginTop: 20, backgroundColor: 'white', color: '#596398' }}>
                 Login
               </Button>
@@ -115,6 +127,7 @@ const LoginPage = () => {
         </Grid>
       </Grid>
     </Box>
+    </>
   );
 };
 

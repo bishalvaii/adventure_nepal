@@ -17,14 +17,15 @@ const AboutUsPage = () => {
                                 About us
                             </Typography>
                             <Typography variant="h5" gutterBottom marginTop={5}>
-                                Beauty Diva is dismantling unrealistic ideals
-                                of perfection.
+                                Adventure Nepal is a travel tour organization
+                                that helps to sell bike rides and tours
+                                packages to the public
 
-                                Our makeup is designed to enhance your
-                                natural beauty and embrace what makes you
-                                unique. Beauty Diva is all about
-                                celebrating your authentic self,
-                                not conforming to someone else's standards.
+                                Our service is designed to enhance your
+                                travelling experiences . Adventure Nepal is all about
+                                going on an adventure to live your life to the 
+                                fullest. 
+                               
                             </Typography>
 
                         </Box>

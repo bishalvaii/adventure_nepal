@@ -184,16 +184,26 @@
                 <FormControl sx={{ minWidth: 210 }}>
                 <InputLabel id="country-label">Country</InputLabel>
                 <Select
-                    labelId="country-label"
-                    id="country"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleChange}
-                    label="Country"
-                >
-                    <MenuItem value="">Select Country</MenuItem>
-                    {/* Add options for different countries here */}
-                </Select>
+                labelId="country-label"
+                id="country"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                label="Country"
+                required // Make country selection required
+              >
+                <MenuItem value="">Select Country</MenuItem>
+                <MenuItem value="Nepal">Nepal</MenuItem>
+                <MenuItem value="USA">USA</MenuItem>
+                <MenuItem value="India">India</MenuItem>
+                <MenuItem value="China">China</MenuItem>
+                <MenuItem value="Japan">Japan</MenuItem>
+                <MenuItem value="Germany">Germany</MenuItem>
+                <MenuItem value="UK">UK</MenuItem>
+                <MenuItem value="Australia">Australia</MenuItem>
+                <MenuItem value="France">France</MenuItem>
+                <MenuItem value="Canada">Canada</MenuItem>
+              </Select>
                 </FormControl>
             </Box>
             </Box>
