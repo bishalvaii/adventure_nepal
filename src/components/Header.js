@@ -1,3 +1,4 @@
+"use client"
 import { AppBar, Avatar, Button, IconButton, Toolbar, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import SearchIcon from '@mui/icons-material/Search';
@@ -29,7 +30,7 @@ const Header = () => {
       router.push('/dashboard')
     }
 
-    const username = localStorage.getItem('username')
+    const username =  localStorage.getItem('username') ;
   return (
     <AppBar position="static" sx={{ bgcolor: "#F5F5F5" }}>
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>

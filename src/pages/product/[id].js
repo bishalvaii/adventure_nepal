@@ -5,6 +5,8 @@ import { Button, Typography, Box } from '@mui/material';
 import Header from '@/components/Header';
 
 const ProductPage = () => {
+  const backendBaseUrl = 'http://localhost:5000'; // Base URL for the backend
+
   const router = useRouter();
   const { id } = router.query; // Get the id parameter from the URL
 
@@ -25,17 +27,16 @@ const ProductPage = () => {
      router.push({
       pathname: '/booking',
       query: {
-        service_name: product.thumbnail_text,
+        service_name: product.name,
         duration: product.duration,
         description: product.description,
         price: product.price,
-        imageUrl: product.image.url,
-        imageWidth: product.image.width,
-        imageHeight: product.image.height
+        imageUrl: product.image_url,
+     
       }
     });
   }
-
+console.log(product)
   return (
     <Box>
       <Header />
@@ -44,18 +45,23 @@ const ProductPage = () => {
           <Box display="flex" alignItems="center">
             <Box flex="1">
               <div style={{ margin: '1rem' }}>
-                <Image src={product.image.url} alt={product.name} width={product.image.width + 300} height={product.image.height + 150 } />
+                <Image
+                      src={`${backendBaseUrl}${product.image_url}`} // Use the full URL for the image
+                      alt={product.name} width={ 500} height={ 450 } />
               </div>
             </Box>
             <Box flex="1" textAlign="left" ml={4}>
               <Typography sx={{fontWeight: 'bold'}} variant="h4" gutterBottom>
-                {product.thumbnail_text} {product.duration}
+                 {product.duration} days
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {product.name}
               </Typography>
               <Typography variant="body1" gutterBottom>
                 {product.description}
               </Typography>
               <Typography variant="h4" gutterBottom>
-                Price: ${product.price}
+                Price: Rs.{product.price}
               </Typography>
               <Button variant="contained" sx={{bgcolor: "#596398"}} onClick={navigateToBooking}>
                 Book Now

@@ -12,11 +12,12 @@ import {
 import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid'; // Import uuid
+
 
 function BookingForm() {
     const [loading, setLoading] = useState(false)
     const router = useRouter();
-    const { service_name } = router.query;
     const [numAdults, setNumAdults] = useState(1);
     const [formData, setFormData] = useState({
         firstName: '',
@@ -31,6 +32,9 @@ function BookingForm() {
         requirements: '',
         payment: '',
     });
+    const { service_name, duration, description, price, imageUrl, imageWidth, imageHeight } = router.query;
+
+    const purchaseOrderId = uuidv4(); // Generate a unique purchase order ID
 
     // Retrieve username from localStorage
     const username = typeof window !== 'undefined' ? localStorage.getItem('username') : null;
@@ -46,60 +50,32 @@ function BookingForm() {
             [name]: value,
         }));
 
-        if (name === 'payment' && value === 'eSewa') {
-            handleKhaltiPayment();
-        }
+        // if (name === 'payment' && value === 'eSewa') {
+        //     handleKhaltiPayment();
+        // }
     };
 
-//     const esewaCall = (formData) => {
-//     console.log('formData:', formData);
 
-//     var path = 'https://rc-epay.esewa.com.np/api/epay/main/v2/form';
-
-
-//     return (
-//         <form action={path} method="POST">
-
-//         </form>
-//     )
-
-//     var form = document.createElement('form');
-//     form.setAttribute('method', 'POST');
-//     form.setAttribute('action', path);
-
-//     for (var key in formData) {
-//         var hiddenField = document.createElement('input');
-//         hiddenField.setAttribute('type', 'hidden');
-//         hiddenField.setAttribute('name', key);
-//         hiddenField.setAttribute('value', formData[key]);
-//         form.appendChild(hiddenField);
-//     }
-
-//     document.body.appendChild(form);
-//     form.submit();
-// };
 
 
     const handleKhaltiPayment = async () => {
         setLoading(true);
-        // const uuid = Math.random().toString(36).substring(2, 15);
-        // const reqBody = {
-        //     amount: 100, // Amount can be set dynamically
-        //     tax_amount: 0,
-        //     product_code: 'EPAYTEST',
-        //     product_service_charge: 0,
-        //     product_delivery_charge: 0,
-        //     total_amount: 100,
-        //     transaction_uuid: uuid,
-        //     success_url: 'https://esewa.com.np',
-        //     failure_url: 'https://your-domain.com/failure', // Replace with your actual failure URL
-        //     signed_field_names: 'total_amount,transaction_uuid,product_code',
-        // };
-    
+
+        const reqBody = {
+            amount: price * numAdults, // Calculate the total amount based on the number of adults
+            purchaseOrderId: purchaseOrderId, // Set dynamically if needed
+            purchaseOrderName: service_name, // Use service name from query parameters
+            customerInfo: {
+              name: `${formData.firstName} ${formData.lastName}`,
+              email: formData.email,
+              phone: formData.phone,
+            },
+          };
+        
         try {
             const response = await fetch('http://localhost:5000/api/payment', {
                 method: 'POST',
-                // body: JSON.stringify(reqBody),
+                body: JSON.stringify(reqBody),
                 headers: { 'Content-Type': 'application/json' },
             });
     
@@ -112,17 +88,19 @@ function BookingForm() {
             const paymentUrl = data.payment_url
             console.log(paymentUrl)
             window.location.href = paymentUrl
-            // Log the response for debugging
-    
-            // Call esewaCall with the response data
+
+            if (paymentUrl) {
+                toast.success('NiCE JOB')
+               }
+            return (
+                <div>
+                    {toast.success("Payment completed successfully, Thank you!")}
+                </div>
+            )
            
-            // second request to esewa api
 
        
 
-           if (paymentUrl) {
-            toast.success('NiCE JOB')
-           }
     
         } catch (error) {
             console.error('Error initiating payment:', error);
@@ -135,8 +113,49 @@ function BookingForm() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+    
+        // Basic validation example (you can expand this as needed)
+        if (!formData.firstName || !formData.lastName  || !formData.phone || !formData.address || !formData.city || !formData.country) {
+            toast.error('Please fill out all required fields.');
+            return;
+        }
+    
         try {
-            const response = await fetch('http://localhost:5000/api/bookings', {
+            setLoading(true);
+    
+            // Initiate payment
+            const paymentResponse = await fetch('http://localhost:5000/api/payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    amount: price * numAdults,
+                    purchaseOrderId: purchaseOrderId,
+                    purchaseOrderName: service_name,
+                    customerInfo: {
+                        name: `${formData.firstName} ${formData.lastName}`,
+                        email: formData.email,
+                        phone: formData.phone,
+                    },
+                }),
+            });
+    
+            if (!paymentResponse.ok) {
+                throw new Error('Failed to initiate payment');
+            }
+    
+            const paymentData = await paymentResponse.json();
+            const paymentUrl = paymentData.payment_url;
+            console.log(paymentUrl);
+    
+            // Redirect user to payment gateway
+            window.location.href = paymentUrl;
+    
+            // Assuming payment is confirmed by the gateway and callback handled separately
+    
+            // Proceed to submit booking after payment success (simplified assumption)
+            const bookingResponse = await fetch('http://localhost:5000/api/bookings', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -149,17 +168,22 @@ function BookingForm() {
                     adults: numAdults,
                 }),
             });
-            if (response.ok) {
+    
+            if (bookingResponse.ok) {
                 console.log('Booking created successfully');
                 toast.success('Booking created successfully');
-                router.push('/bookingconfirmation');
             } else {
                 console.error('Failed to create booking');
+                toast.error('Failed to create booking');
             }
         } catch (error) {
-            console.error('Error creating booking:', error);
+            console.error('Error handling booking and payment:', error);
+            toast.error('Error handling booking and payment');
+        } finally {
+            setLoading(false);
         }
     };
+    
 
     return (
         <Box
@@ -215,7 +239,7 @@ function BookingForm() {
                             onChange={handleChange}
                             label="Deposit"
                         >
-                            <MenuItem value="eSewa">Pay via Esewa</MenuItem>
+                            <MenuItem value="eSewa">Pay via Khalti</MenuItem>
                             <MenuItem value="cashOnArrival">Cash on Arrival</MenuItem>
                         </Select>
                     </FormControl>
@@ -317,8 +341,13 @@ function BookingForm() {
                     </Box>
                 </Box>
                 <Box sx={{ mt: 3, justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-                    <Button type="submit" variant="contained" sx={{ bgcolor: "#596398" }}>
-                        Submit Booking
+                    <Button type="submit"
+                     variant="contained"
+                      sx={{ bgcolor: "#596398" }}
+                      disabled={loading}
+                      onClick={handleSubmit}
+                      >
+                        {loading? "Submitting.." : "Submit" }
                     </Button>
                 </Box>
             </form>
