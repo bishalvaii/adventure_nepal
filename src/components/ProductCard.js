@@ -7,13 +7,13 @@ import Link from 'next/link';
 const ProductCard = ({ product }) => {
   const backendBaseUrl = 'http://localhost:5000'; // Base URL for the backend
 
-  console.log(product.image_url)
+  console.log(`${backendBaseUrl}${product.image_url}`)
   return (
     <Link href={`/product/${product.id}`} passHref>
       <Card sx={{ maxWidth: 300, margin: '1rem', borderRadius: '12px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', position: 'relative' }}>
         <Box sx={{ margin: 'auto', marginTop: '1rem', borderRadius: '12px', position: 'relative', width: 300, height: 300 }}>
           <Image
-                      src={`${backendBaseUrl}${product.image_url}`} // Use the full URL for the image
+            src={ `${backendBaseUrl}${product.image_url}`  } // Use the full URL for the image
 
             alt={product.name}
             layout="fill"
@@ -45,7 +45,7 @@ const ProductCard = ({ product }) => {
             {product.name}
           </Typography>
           <Typography sx={{ mt: 1, fontWeight: 'bold', fontFamily: 'Poppins' }} variant="h6" gutterBottom>
-            {product.duration}
+            {product.duration} days
           </Typography>
         </Box>
       </Card>

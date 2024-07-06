@@ -11,9 +11,7 @@ const Header = () => {
         router.push('/motorcycletours');
       };
 
-    const navigateToShop = () => {
-      router.push('/shop');
-    };
+    
   
     const navigateToAboutUs = () => {
       router.push('/aboutus')

@@ -33,7 +33,7 @@ function BookingForm() {
         payment: '',
     });
     const { service_name, duration, description, price, imageUrl, imageWidth, imageHeight } = router.query;
-
+console.log(service_name, price )
     const purchaseOrderId = uuidv4(); // Generate a unique purchase order ID
 
     // Retrieve username from localStorage
@@ -41,6 +41,7 @@ function BookingForm() {
 
     const handleChangeAdults = (event) => {
         setNumAdults(parseInt(event.target.value));
+        console.log(numAdults)
     };
 
     const handleChange = (event) => {
@@ -112,78 +113,78 @@ function BookingForm() {
     
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-    
-        // Basic validation example (you can expand this as needed)
-        if (!formData.firstName || !formData.lastName  || !formData.phone || !formData.address || !formData.city || !formData.country) {
-            toast.error('Please fill out all required fields.');
-            return;
-        }
-    
-        try {
-            setLoading(true);
-    
-            // Initiate payment
-            const paymentResponse = await fetch('http://localhost:5000/api/payment', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    amount: price * numAdults,
-                    purchaseOrderId: purchaseOrderId,
-                    purchaseOrderName: service_name,
-                    customerInfo: {
-                        name: `${formData.firstName} ${formData.lastName}`,
-                        email: formData.email,
-                        phone: formData.phone,
-                    },
-                }),
-            });
-    
-            if (!paymentResponse.ok) {
-                throw new Error('Failed to initiate payment');
-            }
-    
-            const paymentData = await paymentResponse.json();
-            const paymentUrl = paymentData.payment_url;
-            console.log(paymentUrl);
-    
-            // Redirect user to payment gateway
-            window.location.href = paymentUrl;
-    
-            // Assuming payment is confirmed by the gateway and callback handled separately
-    
-            // Proceed to submit booking after payment success (simplified assumption)
-            const bookingResponse = await fetch('http://localhost:5000/api/bookings', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    ...formData,
-                    username: username,
-                    service_name: service_name,
-                    payment: formData.payment,
-                    adults: numAdults,
-                }),
-            });
-    
-            if (bookingResponse.ok) {
-                console.log('Booking created successfully');
-                toast.success('Booking created successfully');
-            } else {
-                console.error('Failed to create booking');
-                toast.error('Failed to create booking');
-            }
-        } catch (error) {
-            console.error('Error handling booking and payment:', error);
-            toast.error('Error handling booking and payment');
-        } finally {
-            setLoading(false);
-        }
-    };
-    
+      event.preventDefault();
+  
+      // Basic validation example (you can expand this as needed)
+      if (!formData.firstName || !formData.lastName  || !formData.phone || !formData.address || !formData.city || !formData.country) {
+          toast.error('Please fill out all required fields.');
+          return;
+      }
+  
+      try {
+          setLoading(true);
+  
+          // Initiate payment
+          const paymentResponse = await fetch('http://localhost:5000/api/payment', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  amount: price * numAdults,
+                  purchaseOrderId: purchaseOrderId,
+                  purchaseOrderName: service_name,
+                  customerInfo: {
+                      name: `${formData.firstName} ${formData.lastName}`,
+                      email: formData.email,
+                      phone: formData.phone,
+                  },
+              }),
+          });
+  
+          if (!paymentResponse.ok) {
+              throw new Error('Failed to initiate payment');
+          }
+  
+          const paymentData = await paymentResponse.json();
+          console.log(paymentData)
+          const paymentUrl = paymentData.payment_url;
+          console.log(paymentUrl);
+  
+          // Redirect user to payment gateway
+          window.location.href = paymentUrl;
+  
+          // Assuming payment is confirmed by the gateway and callback handled separately
+  
+          // Proceed to submit booking after payment success (simplified assumption)
+          const bookingResponse = await fetch('http://localhost:5000/api/bookings', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  ...formData,
+                  username: username,
+                  service_name: service_name,
+                  payment: formData.payment,
+                  adults: numAdults,
+              }),
+          });
+  
+          if (bookingResponse.ok) {
+              console.log('Booking created successfully');
+              toast.success('Booking created successfully');
+          } else {
+              console.error('Failed to create booking');
+              toast.error('Failed to create booking');
+          }
+      } catch (error) {
+          console.error('Error handling booking and payment:', error);
+          toast.error('Error handling booking and payment');
+      } finally {
+          setLoading(false);
+      }
+  };
 
     return (
         <Box

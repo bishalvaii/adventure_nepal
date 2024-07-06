@@ -28,25 +28,27 @@ const ProductList = () => {
   }, []);
 
   return (
-    <Box sx={{ ml: 4, mb: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        What we offer
-      </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
-        <Typography>Filter tours by price</Typography>
-        <FormControl fullWidth>
-          <InputLabel id="sort-select-label">Sort by</InputLabel>
-          <Select
-            labelId="sort-select-label"
-            id="sort-select"
-            value={sortOrder}
-            label="Sort by"
-            onChange={handleSortChange}
-          >
-            <MenuItem value="highToLow">High to Low</MenuItem>
-            <MenuItem value="lowToHigh">Low to High</MenuItem>
-          </Select>
-        </FormControl>
+    <Box sx={{ p: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Typography variant="h4" gutterBottom>
+          What we offer
+        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Typography>Filter tours by price</Typography>
+          <FormControl sx={{ minWidth: 150 }}>
+            <InputLabel id="sort-select-label">Sort by</InputLabel>
+            <Select
+              labelId="sort-select-label"
+              id="sort-select"
+              value={sortOrder}
+              label="Sort by"
+              onChange={handleSortChange}
+            >
+              <MenuItem value="highToLow">High to Low</MenuItem>
+              <MenuItem value="lowToHigh">Low to High</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', mt: 4 }}>
         {sortedServices.map((product) => (

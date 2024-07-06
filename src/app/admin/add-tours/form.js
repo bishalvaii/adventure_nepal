@@ -49,8 +49,7 @@ const AdminTourForm = () => {
   const [editMode, setEditMode] = useState(false);
   const [editTourId, setEditTourId] = useState(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [currentImage, setCurrentImage] = useState(null); // State to hold current image for edit
-
+  const [currentImage, setCurrentImage] = useState(''); // State to hold current image for edit
 
   useEffect(() => {
     fetchTours();
@@ -147,19 +146,21 @@ const AdminTourForm = () => {
     form.append('price', formData.price);
     form.append('elevation', formData.elevation);
     form.append('duration', formData.duration);
+
+    // Append image only if formData.image exists
     if (formData.image) {
       form.append('image', formData.image);
     } else {
-      // Append current image URL if no new image selected (assuming it's a string URL)
-      form.append('image', currentImage);
+      // Append currentImage if no new image selected
+      form.append('image', currentImage || ''); // Use currentImage or an empty string
     }
-    console.log("Form Data:");
+
     try {
-        const response = await fetch(`http://localhost:5000/api/services/${editTourId}`, {
-            method: 'PUT',
-            body: form,
+      const response = await fetch(`http://localhost:5000/api/services/${editTourId}`, {
+        method: 'PUT',
+        body: form,
       });
-  
+
       if (response.ok) {
         const updatedTour = await response.json();
         const updatedTours = tours.map((tour) =>
@@ -185,7 +186,6 @@ const AdminTourForm = () => {
       alert('Failed to update tour');
     }
   };
-  
 
   const handleOpenEditDialog = (tour) => {
     setFormData({
@@ -194,12 +194,11 @@ const AdminTourForm = () => {
       price: tour.price,
       elevation: tour.elevation,
       duration: tour.duration,
-      image_url: null, // Reset image for edit mode
     });
     setEditTourId(tour.id);
+    setEditMode(true);
     setOpenEditDialog(true);
-    setCurrentImage(tour.image_url); // Set current image for edit mode
-
+    setCurrentImage(tour.image_url || ''); // Set current image for edit mode, use tour.image_url or an empty string
   };
 
   const handleCloseEditDialog = () => {
@@ -212,16 +211,19 @@ const AdminTourForm = () => {
       image: null,
     });
     setEditTourId(null);
+    setEditMode(false);
     setOpenEditDialog(false);
   };
-  const backendBaseUrl = 'http://localhost:5000'; // Base URL for the backend
 
+  const backendBaseUrl = 'http://localhost:5000'; // Base URL for the backend
 
   return (
     <FormContainer>
       <AddTodo />
       <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', mt: 4 }}>
-        {tours.map((tour) => (
+        {tours.map((tour) => {
+          console.log(`${backendBaseUrl}${tour.image_url}`)
+          return (
           <Card key={tour.id} sx={{ maxWidth: 400, margin: '0.5rem' }}>
             <CardContent>
               <div style={{ position: 'relative', width: '100%', height: 200 }}>
@@ -258,13 +260,14 @@ const AdminTourForm = () => {
               </Box>
             </CardContent>
           </Card>
-        ))}
+          ) 
+})}
       </Box>
 
       <Dialog open={openEditDialog} onClose={handleCloseEditDialog}>
         <DialogTitle>Edit Tour</DialogTitle>
         <DialogContent>
-        {currentImage && (
+          {currentImage && (
             <div style={{ position: 'relative', width: '100%', height: 200, marginBottom: '1rem' }}>
               <Image
                 src={`${backendBaseUrl}${currentImage}`} // Use the full URL for the current image

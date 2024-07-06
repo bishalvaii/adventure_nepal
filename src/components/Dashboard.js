@@ -5,15 +5,11 @@ import Image from 'next/image';
 import heroimgage from '../images/heroimage.jpg';
 import adventure from "../images/adventure.webp";
 import tourguide from "../images/tourguide.jpg";
-import lomangthang from "../images/lomangthang.jpg"
-import manag from "../images/manag.jpg"
-import biker from "../images/biker.jpeg"
 import { Facebook, Instagram, Pinterest } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import vip from "../images/vip.png"
-import ProductCard from './ProductCard';
 import Header from './Header';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import ProductList from './ProductList';
 
 
@@ -58,10 +54,10 @@ const Dashboard = () => {
           objectFit="cover"
         />
         <Box position="absolute" top="50%" transform="translate(-50%, -50%)" textAlign="center" width="100%">
-          <Typography variant="h3" component="h2" gutterBottom>
+          <Typography variant="h3" component="h2" gutterBottom sx={{fontWeight: 'bold'}}>
             Adventure is worthwhile
           </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
+          <Typography variant="h5" component="p" gutterBottom>
             Adventure nepal is the one through which you can travel to dreamy destinations
           </Typography>
           <Button variant="contained" style={{ backgroundColor: '#D9D9D9', color: 'black' }} onClick={navigateToContact}>
@@ -105,24 +101,33 @@ const Dashboard = () => {
             Get in touch
           </Typography>
           <Typography variant="body1">
-            Address: 1234 Street, City, Country
+            Address: Lakeside-6, Pokhara, Nepal
             <br />
-            Phone: +123 456 789
             <br />
-            Email: info@example.com
+            Phone: +977 9861045634
+            <br />
+            <br />
+            Email: info@adventurenepal.com
           </Typography>
         </Box>
         <Box textAlign="center" mb={2}>
           <Typography variant="h5" gutterBottom>
             Quick links
           </Typography>
-          <Typography variant="body1">
+          <Typography onClick={navigateToTourInfo}variant="body1" >
             Tour info
+            </Typography>
             <br />
+            <Typography onClick={navigateToTours}>
             Motorcycle tours
+            </Typography>
             <br />
+            <Typography onClick={navigateToHome}>
             Home
+            </Typography>
             <br />
+            <Typography onClick={navigateToAboutUs}>
+            About us
           </Typography>
         </Box>
 
@@ -142,7 +147,7 @@ const Dashboard = () => {
         </Box>
       </Box>
       <Box textAlign="center" alignItems="center" justifyContent='center'>
-        <Typography>© Copyright Adventure Nepal. All rights reserved </Typography>
+        <Typography>© Copyright 2024 Adventure Nepal. All rights reserved </Typography>
       </Box>
 
     </>

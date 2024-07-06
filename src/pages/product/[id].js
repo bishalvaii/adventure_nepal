@@ -47,19 +47,21 @@ console.log(product)
               <div style={{ margin: '1rem' }}>
                 <Image
                       src={`${backendBaseUrl}${product.image_url}`} // Use the full URL for the image
-                      alt={product.name} width={ 500} height={ 450 } />
+                      alt={product.name} width={ 700} height={ 550 } />
               </div>
             </Box>
             <Box flex="1" textAlign="left" ml={4}>
-              <Typography sx={{fontWeight: 'bold'}} variant="h4" gutterBottom>
-                 {product.duration} days
-              </Typography>
-              <Typography variant="body1" gutterBottom>
+            <Typography sx={{fontWeight: 'bold'}} variant="h3" gutterBottom>
                 {product.name}
               </Typography>
-              <Typography variant="body1" gutterBottom>
-                {product.description}
+               
+              <Typography variant="h6" gutterBottom>
+                About this tour: {product.description}
               </Typography>
+              <Typography sx={{fontWeight: 'bold'}} variant="h4" gutterBottom>
+                Duration: {product.duration} days
+              </Typography>
+            
               <Typography variant="h4" gutterBottom>
                 Price: Rs.{product.price}
               </Typography>
