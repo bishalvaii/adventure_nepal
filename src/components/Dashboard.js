@@ -15,7 +15,6 @@ import ProductList from './ProductList';
 
 
 const Dashboard = () => {
-  const [services, setServices] = useState([])
   const router = useRouter();
   const navigateToTours = () => {
     router.push('/motorcycletours');

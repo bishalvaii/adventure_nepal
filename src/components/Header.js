@@ -1,11 +1,12 @@
 "use client"
 import { AppBar, Avatar, Button, IconButton, Toolbar, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import SearchIcon from '@mui/icons-material/Search';
 
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 const Header = () => {
+  const  [username, setUsername] = useState("")
     const router = useRouter();
     const navigateToTours = () => {
         router.push('/motorcycletours');
@@ -28,7 +29,12 @@ const Header = () => {
       router.push('/dashboard')
     }
 
-    const username =  localStorage.getItem('username') ;
+    useEffect(() => {
+      if (typeof window !== 'undefined') {
+        const storedUsername = localStorage.getItem("username")
+        setUsername(storedUsername)
+      }
+    }, [])
   return (
     <AppBar position="static" sx={{ bgcolor: "#F5F5F5" }}>
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>

@@ -33,7 +33,7 @@ function BookingForm() {
         payment: '',
     });
     const { service_name, duration, description, price, imageUrl, imageWidth, imageHeight } = router.query;
-console.log(service_name, price )
+    console.log(service_name, price)
     const purchaseOrderId = uuidv4(); // Generate a unique purchase order ID
 
     // Retrieve username from localStorage
@@ -51,140 +51,85 @@ console.log(service_name, price )
             [name]: value,
         }));
 
-        // if (name === 'payment' && value === 'eSewa') {
-        //     handleKhaltiPayment();
-        // }
+
     };
 
 
 
 
-    const handleKhaltiPayment = async () => {
-        setLoading(true);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
-        const reqBody = {
-            amount: price * numAdults, // Calculate the total amount based on the number of adults
-            purchaseOrderId: purchaseOrderId, // Set dynamically if needed
-            purchaseOrderName: service_name, // Use service name from query parameters
-            customerInfo: {
-              name: `${formData.firstName} ${formData.lastName}`,
-              email: formData.email,
-              phone: formData.phone,
-            },
-          };
-        
+        // Basic validation example (you can expand this as needed)
+        if (!formData.firstName || !formData.lastName || !formData.phone || !formData.address || !formData.city || !formData.country) {
+            toast.error('Please fill out all required fields.');
+            return;
+        }
+
         try {
-            const response = await fetch('http://localhost:5000/api/payment', {
+            setLoading(true);
+
+            // Initiate payment
+            const paymentResponse = await fetch('http://localhost:5000/api/payment', {
                 method: 'POST',
-                body: JSON.stringify(reqBody),
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    amount: price * numAdults,
+                    purchaseOrderId: purchaseOrderId,
+                    purchaseOrderName: service_name,
+                    customerInfo: {
+                        name: `${formData.firstName} ${formData.lastName}`,
+                        email: formData.email,
+                        phone: formData.phone,
+                    },
+                }),
             });
-    
-            if (!response.ok) {
+
+            if (!paymentResponse.ok) {
                 throw new Error('Failed to initiate payment');
             }
-    
-            const data = await response.json();
-            console.log(data);
-            const paymentUrl = data.payment_url
-            console.log(paymentUrl)
-            window.location.href = paymentUrl
 
-            if (paymentUrl) {
-                toast.success('NiCE JOB')
-               }
-            return (
-                <div>
-                    {toast.success("Payment completed successfully, Thank you!")}
-                </div>
-            )
-           
+            const paymentData = await paymentResponse.json();
+            console.log(paymentData)
+            const paymentUrl = paymentData.payment_url;
+            console.log(paymentUrl);
 
-       
+            // Redirect user to payment gateway
+            window.location.href = paymentUrl;
 
-    
+            // Assuming payment is confirmed by the gateway and callback handled separately
+
+            // Proceed to submit booking after payment success (simplified assumption)
+            const bookingResponse = await fetch('http://localhost:5000/api/bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...formData,
+                    username: username,
+                    service_name: service_name,
+                    payment: formData.payment,
+                    adults: numAdults,
+                }),
+            });
+
+            if (bookingResponse.ok) {
+                console.log('Booking created successfully');
+                toast.success('Booking created successfully');
+            } else {
+                console.error('Failed to create booking');
+                toast.error('Failed to create booking');
+            }
         } catch (error) {
-            console.error('Error initiating payment:', error);
-            toast.error('Response wasnt made to API');
+            console.error('Error handling booking and payment:', error);
+            toast.error('Error handling booking and payment');
         } finally {
             setLoading(false);
         }
     };
-    
-
-    const handleSubmit = async (event) => {
-      event.preventDefault();
-  
-      // Basic validation example (you can expand this as needed)
-      if (!formData.firstName || !formData.lastName  || !formData.phone || !formData.address || !formData.city || !formData.country) {
-          toast.error('Please fill out all required fields.');
-          return;
-      }
-  
-      try {
-          setLoading(true);
-  
-          // Initiate payment
-          const paymentResponse = await fetch('http://localhost:5000/api/payment', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                  amount: price * numAdults,
-                  purchaseOrderId: purchaseOrderId,
-                  purchaseOrderName: service_name,
-                  customerInfo: {
-                      name: `${formData.firstName} ${formData.lastName}`,
-                      email: formData.email,
-                      phone: formData.phone,
-                  },
-              }),
-          });
-  
-          if (!paymentResponse.ok) {
-              throw new Error('Failed to initiate payment');
-          }
-  
-          const paymentData = await paymentResponse.json();
-          console.log(paymentData)
-          const paymentUrl = paymentData.payment_url;
-          console.log(paymentUrl);
-  
-          // Redirect user to payment gateway
-          window.location.href = paymentUrl;
-  
-          // Assuming payment is confirmed by the gateway and callback handled separately
-  
-          // Proceed to submit booking after payment success (simplified assumption)
-          const bookingResponse = await fetch('http://localhost:5000/api/bookings', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                  ...formData,
-                  username: username,
-                  service_name: service_name,
-                  payment: formData.payment,
-                  adults: numAdults,
-              }),
-          });
-  
-          if (bookingResponse.ok) {
-              console.log('Booking created successfully');
-              toast.success('Booking created successfully');
-          } else {
-              console.error('Failed to create booking');
-              toast.error('Failed to create booking');
-          }
-      } catch (error) {
-          console.error('Error handling booking and payment:', error);
-          toast.error('Error handling booking and payment');
-      } finally {
-          setLoading(false);
-      }
-  };
 
     return (
         <Box
@@ -343,12 +288,12 @@ console.log(service_name, price )
                 </Box>
                 <Box sx={{ mt: 3, justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
                     <Button type="submit"
-                     variant="contained"
-                      sx={{ bgcolor: "#596398" }}
-                      disabled={loading}
-                      onClick={handleSubmit}
-                      >
-                        {loading? "Submitting.." : "Submit" }
+                        variant="contained"
+                        sx={{ bgcolor: "#596398" }}
+                        disabled={loading}
+                        onClick={handleSubmit}
+                    >
+                        {loading ? "Submitting.." : "Submit"}
                     </Button>
                 </Box>
             </form>
